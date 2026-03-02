@@ -6,7 +6,7 @@ A barebones project to test WebGPU compilation from C to both WebAssembly (via E
 
 The WebGPU API in C is defined by a standard header (`webgpu.h`), allowing the same source code to interface with different backend implementations depending on the compilation target.
 
-*   **WebAssembly (Emscripten):** The `--use-port=emdawnwebgpu` compiler flag instructs Emscripten to provide Dawn's standard WebGPU C headers and link the corresponding JavaScript wrappers. At runtime, these wrappers translate the C API calls into the browser's native JavaScript WebGPU API. Dawn is Google's WebGPU implementation used in Chrome.
+*   **WebAssembly (Emscripten):** The `--use-port=emdawnwebgpu` compiler flag instructs Emscripten to provide the standard WebGPU C headers (maintained by the Dawn project) and link the corresponding JavaScript wrappers (from Dawn). At runtime, these wrappers translate the C API calls into the browser's native JavaScript WebGPU API. Dawn is Google's WebGPU implementation used in Chrome.
 *   **Native Linux (GCC):** The C source is compiled against the headers provided by the `wgpu-native` [release](https://github.com/gfx-rs/wgpu-native/releases/), a Rust implementation of the WebGPU specification that maps the C API calls to native desktop graphics APIs like Vulkan. It's based on `wgpu`, which is used by Firefox.
 
 ## WebAssembly Build (Emscripten)
