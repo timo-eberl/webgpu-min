@@ -6,8 +6,8 @@ A barebones project to test WebGPU compilation from C to both WebAssembly (via E
 
 The WebGPU API in C is defined by a standard header (`webgpu.h`), allowing the same source code to interface with different backend implementations depending on the compilation target.
 
-*   **WebAssembly (Emscripten):** The `--use-port=emdawnwebgpu` compiler flag instructs Emscripten to provide Dawn's standard WebGPU C headers and link the corresponding JavaScript wrappers. At runtime, these wrappers translate the C API calls into the browser's native JavaScript WebGPU API.
-*   **Native Linux (GCC):** The C source is compiled against the headers provided by the `wgpu-native` [release](https://github.com/gfx-rs/wgpu-native/releases/) and dynamically linked against `libwgpu_native.so`. This shared library is a Rust-based implementation of the WebGPU specification that maps the C API calls to native desktop graphics APIs (e.g. Vulkan).
+*   **WebAssembly (Emscripten):** The `--use-port=emdawnwebgpu` compiler flag instructs Emscripten to provide Dawn's standard WebGPU C headers and link the corresponding JavaScript wrappers. At runtime, these wrappers translate the C API calls into the browser's native JavaScript WebGPU API. Dawn is Google's WebGPU implementation used in Chrome.
+*   **Native Linux (GCC):** The C source is compiled against the headers provided by the `wgpu-native` [release](https://github.com/gfx-rs/wgpu-native/releases/), a Rust implementation of the WebGPU specification that maps the C API calls to native desktop graphics APIs like Vulkan. It's based on `wgpu`, which is used by Firefox.
 
 ## WebAssembly Build (Emscripten)
 
@@ -24,15 +24,14 @@ python3 -m http.server --directory build
 
 ## Native Linux Build (GCC)
 
-Compile using GCC. We use `$ORIGIN` in the `rpath` so the resulting executable knows how to find the `libwgpu_native.so` relative to its own location inside the `build/` folder.
+Compile using GCC. We statically link against `libwgpu_native.a` to create a portable executable.
 
 ```bash
 mkdir build
 gcc main.c -o build/app \
     -I./wgpu-native/include \
-    -L./wgpu-native/lib \
-    -lwgpu_native \
-    -Wl,-rpath,'$ORIGIN/../wgpu-native/lib'
+    ./wgpu-native/lib/libwgpu_native.a \
+    -lm
 ```
 
 **To Run:**
