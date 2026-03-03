@@ -11,6 +11,8 @@ The WebGPU API in C is defined by a standard header (`webgpu.h`), allowing the s
 
 ## WebAssembly Build (Emscripten)
 
+> More details here: https://dawn.googlesource.com/dawn/%2B/refs/heads/main/src/emdawnwebgpu/pkg/README.md
+
 ```bash
 mkdir build
 emcc main.c -o build/index.html --use-port=emdawnwebgpu
