@@ -102,7 +102,16 @@ void on_adapter(WGPURequestAdapterStatus s, WGPUAdapter a, WGPUStringView m, voi
 }
 
 int main(void) {
+#ifdef __EMSCRIPTEN__
+	int has_webgpu = EM_ASM_INT({ return ('gpu' in navigator) ? 1 : 0; });
+	if (!has_webgpu) {
+		printf("WebGPU is not supported in this browser, you may have to enable it.\n");
+		return 0;
+	}
+#endif
+
 	WGPUInstance instance = wgpuCreateInstance(NULL);
+
 	WGPURequestAdapterCallbackInfo cb = {.mode = WGPUCallbackMode_AllowSpontaneous,
 										 .callback = on_adapter};
 	WGPURequestAdapterOptions options = {.powerPreference = WGPUPowerPreference_HighPerformance};
